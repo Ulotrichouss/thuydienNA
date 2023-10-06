@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Admin</title>
+  <link rel="stylesheet" href="vendors/feather/feather.css">
+  <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="css/vertical-layout-light/style.css">
+  <link rel="stylesheet" href="css/vertical-layout-light/custom.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="shortcut icon" href="images/favicon.png" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="/"><img src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="/"><img src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" alt="logo"/></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="images/faces/face28.jpg" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="ti-settings text-primary"></i>
+                Settings
+              </a>
+              <a class="dropdown-item">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Tính toán</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Edit Tính toán</h4>
+                    <form class="forms-sample" action="/update/<%= data._id%>" method="POST">
+                        <div class="form-group">
+                            <label for="water-before">Nhập mực nước hồ trước:</label>
+                            <label style="color: red;">*</label>
+                            <div class="input-container">
+                                <div class="typeInput">
+                                    <input type="number" id="water-before" class="form-control" 
+                                    name="wbefore" min="214" max="245" step="0.1" placeholder="0,00" value="<%= data.nuoctruoc%>" onchange="getWB()">
+                                    <div class="typeSpan">
+                                        <span class="minus" role="button" id="minusHT" onchange="getWB()">
+                                            <i class="icon fa fa-fw fa-minus"></i>
+                                        </span>
+                                        <span class="plus" role="button" id="plusHT" onchange="getWB()">
+                                            <i class="icon fa fa-fw fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cap-wbefore">Dung tích hồ trước</label>
+                                <input type="tel" id="cap-wbefore" class="form-control" name="capbefore" 
+                                  step="0.01" readonly="readonly" value="<%= data.dungtichtruoc%>">
+                        </div>
+                        <div class="form-group">
+                            <label for="water-before">Nhập mực nước hồ sau</label>
+                            <div class="input-container">
+                                <div class="typeInput">
+                                    <input type="number" id="water-after" class="form-control"
+                                        name="wafter" min="214" max="245" step="0.1" placeholder="0,00" value="<%= data.nuocsau%>" onchange="getWA()">
+                                    <div class="typeSpan">
+                                        <span class="minus" role="button" id="minusHS" onchange="getWA()">
+                                            <i class="icon fa fa-fw fa-minus"></i>
+                                        </span>
+                                        <span class="plus" role="button" id="plusHS" onchange="getWA()">
+                                            <i class="icon fa fa-fw fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="form-group">
+                            <label for="cap-wafte">Dung tích hồ sau</label>
+                            <input type="tel" id="cap-wafter" class="form-control" name="capafter" 
+                                step="0.01" readonly="readonly" value="<%= data.dungtichsau%>">
+                        </div>
+                        <div class="form-group">
+                            <label for="q-lake">Q về hồ (m3/s)</label>
+                            <div class="input-container">
+                                <div class="typeInput">
+                                    <input type="number" id="q-lake" class="form-control"
+                                        name="qlake" step="0.01" placeholder="0.00" value="<%= data.qho%>" onchange="getCal()">
+                                    <div class="typeSpan">
+                                        <span class="minus" role="button" id="minusQH" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-minus"></i>
+                                        </span>
+                                        <span class="plus" role="button" id="plusQH" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="form-group">
+                            <label for="q-run">Q chạy máy (m3/s)</label>
+                            <div class="input-container">
+                                <div class="typeInput">
+                                    <input type="number" id="q-run" class="form-control"
+                                        name="qrun" step="0.1" placeholder="0.00" value="<%= data.qmay%>" onchange="getCal()">
+                                    <div class="typeSpan">
+                                        <span class="minus" role="button" id="minusQM" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-minus"></i>
+                                        </span>
+                                        <span class="plus" role="button" id="plusQM" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="form-group">
+                            <label for="q-dis">Q xả (m3/s)</label>
+                            <div class="input-container">
+                                <div class="typeInput">
+                                    <input type="number" id="q-dis" class="form-control"
+                                        name="qdis" step="0.01" placeholder="0.00" value="<%= data.qxa%>" onchange="getCal()">
+                                        <div class="typeSpan">
+                                        <span class="minus" role="button" id="minusQX" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-minus"></i>
+                                        </span>
+                                        <span class="plus" role="button" id="plusQX" onchange="getCal()">
+                                            <i class="icon fa fa-fw fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="form-group">
+                            <label for="time-hour">Thời gian đầy hồ (giờ)</label>
+                            <input type="tel" id="time-hour" class="form-control" name="timehour" 
+                                step="0.01" readonly="readonly" value="<%= data.timehour%>">
+                        </div>
+                        <div class="form-group">
+                            <label for="time-day">Thời gian đầy hồ (ngày)</label>
+                            <input type="tel" id="time-day" class="form-control" name="timeday" 
+                                step="0.01" readonly="readonly" value="<%= data.timeday%>">
+                        </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="vendors/js/vendor.bundle.base.js"></script>
+  <script src="js/off-canvas.js"></script>
+  <script src="js/hoverable-collapse.js"></script>
+  <script src="js/template.js"></script>
+  <script src="js/dataform.js"></script>
+  <script>
+    function rever(data) {
+      let val = [...data.replaceAll(".",",")].reverse().join("").replace(",",".");
+      let value = [...val].reverse().join("");
+      return value
+    }
+    function reverValue(data) {
+      let val = data.replaceAll(",","")
+      return val
+    }
+    async function getWB() {
+      const str = document.getElementById("water-before");
+      const value = str.value;
+      const newVal = value.replaceAll(".", ",")
+      str.addEventListener('click', fetch)
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          value: newVal
+        })
+      }
+      const hs = await fetch('/click',options)
+      const h = await hs.json()  
+      let rs = document.getElementById("cap-wbefore");
+      rs.setAttribute("value",rever(h.data.val));
+    };
+    async function getWA() {
+      const str = document.getElementById("water-after");
+      const value = str.value;
+      const newVal = value.replaceAll(".", ",")
+      str.addEventListener('click', fetch)
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          value: newVal
+        })
+      }
+      const hs = await fetch('/click',options)
+      const h = await hs.json()  
+      let rs = document.getElementById("cap-wafter");
+      rs.setAttribute("value",rever(h.data.val));
+    };
+    function getCal() {
+      let before = +reverValue(document.getElementById("cap-wbefore").value);
+      let after = +reverValue(document.getElementById("cap-wafter").value);
+      let qHo = parseFloat(document.getElementById("q-lake").value);
+      let qXa = parseFloat(document.getElementById("q-dis").value);
+      let qMay = parseFloat(document.getElementById("q-run").value);
+      let rsH = document.getElementById("time-hour");
+      let rsD = document.getElementById("time-day");
+      let rs = (after-before)/(qHo-qMay-qXa)/3600;
+      rsH.setAttribute("value",rs.toFixed(2));
+      rsD.setAttribute("value",(rs/24).toFixed(2));
+    };
+  </script>
+</body>
+</html>
