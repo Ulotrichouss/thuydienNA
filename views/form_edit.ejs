@@ -4,14 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Admin</title>
+  <title>Tính thủy văn</title>
   <link rel="stylesheet" href="vendors/feather/feather.css">
   <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
   <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="css/vertical-layout-light/style.css">
   <link rel="stylesheet" href="css/vertical-layout-light/custom.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="shortcut icon" href="images/favicon.png" />
+  <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
 </head>
 
 <body>
@@ -40,7 +40,7 @@
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="images/faces/face28.jpg" alt="profile"/>
+              <img src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <a class="dropdown-item">
@@ -83,8 +83,8 @@
                             <label style="color: red;">*</label>
                             <div class="input-container">
                                 <div class="typeInput">
-                                    <input type="number" id="water-before" class="form-control" 
-                                    name="wbefore" min="214" max="245" step="0.1" placeholder="0,00" value="<%= data.nuoctruoc%>" onchange="getWB()">
+                                    <input type="number" id="water-before" class="form-control"
+                                     name="wbefore" min="214" max="245" step="0.1" placeholder="0,00" value="<%= data.nuoctruoc%>" onchange="getWB()">
                                     <div class="typeSpan">
                                         <span class="minus" role="button" id="minusHT" onchange="getWB()">
                                             <i class="icon fa fa-fw fa-minus"></i>
@@ -201,19 +201,13 @@
   <script src="js/template.js"></script>
   <script src="js/dataform.js"></script>
   <script>
-    function rever(data) {
-      let val = [...data.replaceAll(".",",")].reverse().join("").replace(",",".");
-      let value = [...val].reverse().join("");
-      return value
-    }
     function reverValue(data) {
       let val = data.replaceAll(",","")
       return val
     }
     async function getWB() {
-      const str = document.getElementById("water-before");
-      const value = str.value;
-      const newVal = value.replaceAll(".", ",")
+      const str = document.getElementById("water-before")
+      const newVal = str.value.replace(",",".")
       str.addEventListener('click', fetch)
       const options = {
         method: 'POST',
@@ -227,12 +221,11 @@
       const hs = await fetch('/click',options)
       const h = await hs.json()  
       let rs = document.getElementById("cap-wbefore");
-      rs.setAttribute("value",rever(h.data.val));
+      rs.setAttribute("value",h.data.val);
     };
     async function getWA() {
       const str = document.getElementById("water-after");
-      const value = str.value;
-      const newVal = value.replaceAll(".", ",")
+      const newVal = str.value.replaceAll(",", ".")
       str.addEventListener('click', fetch)
       const options = {
         method: 'POST',
@@ -246,7 +239,7 @@
       const hs = await fetch('/click',options)
       const h = await hs.json()  
       let rs = document.getElementById("cap-wafter");
-      rs.setAttribute("value",rever(h.data.val));
+      rs.setAttribute("value",h.data.val);
     };
     function getCal() {
       let before = +reverValue(document.getElementById("cap-wbefore").value);
