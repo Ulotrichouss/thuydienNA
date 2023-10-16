@@ -133,40 +133,27 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex justify-content-between">
-                      <p class="card-title">Tính toán</p>
-                      <div class="template-demo">
-                        <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/createTT'">
-                          <i class="ti-plus"></i>
-                        </button>
-                      </div>
+                      <p class="card-title">Bước xả</p>
                     </div>
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <thead>
                           <tr>
-                            <th>Mực nước trước</th>
-                            <th>Q về hồ (m3/s)</th>
-                            <th>Q chạy máy (m3/s)</th>
-                            <th>Q xả (m3/s)</th>
+                            <th>Bước</th>
+                            <th>Độ mở</th>
+                            <th>Cửa xả</th>
+                            <th>Cao trình 235</th>
+                            <th>Cao trình 240</th>
                           </tr>
                         </thead>
                         <tbody>
                           <% table.forEach(function(item) { %>
                             <tr>
-                              <td><%- item.nuoctruoc %></td>
-                              <td><%- item.qho %></td>
-                              <td><%- item.qmay %></td>
-                              <td><%- item.qxa %></td>
-                              <td>
-                                <div class="template-demo">
-                                  <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/tinhtoan/edit/<%- item._id%>'">
-                                    <i class="ti-pencil-alt"></i>
-                                  </button>
-                                  <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/tinhtoan/delete/<%- item._id%>'">
-                                    <i class="ti-trash"></i>
-                                  </button>
-                                </div>
-                              </td>
+                              <td><%- item.buoc %></td>
+                              <td><%- item.domo %></td>
+                              <td><%- item.cuaxa %></td>
+                              <td><%- item.trinh235 %></td>
+                              <td><%- item.trinh240 %></td>
                           <% }) %>
                         </tbody>
                       </table>

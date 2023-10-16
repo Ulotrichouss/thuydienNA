@@ -1,0 +1,23 @@
+const express = require('express')
+const MainController = require('../controllers/mainController')
+const router = express.Router()
+
+router.get('/',MainController.getMain)
+router.get('/buocxa',MainController.getBuocxa)
+router.get('/sanluong',MainController.getSanluong)
+router.get('/createTT',MainController.getAddTT)
+router.get('/createSL',MainController.getAddSL)
+router.post('/tinhtoan/create',MainController.postCreateTT)
+router.post('/sanluong/create',MainController.postCreateSL)
+router.post('/hochua/create',MainController.postCreateHC)
+router.post('/buocxa/create',MainController.postCreateBX)
+router.get('/sanluong/edit/:id',MainController.getEditSL)
+router.post('/sanluong/update/:id',MainController.postUpdateSL)
+router.get('/sanluong/delete/:id',MainController.getDeleteSL)
+router.get('/tinhtoan/edit/:id',MainController.getEditTT)
+router.post('/tinhtoan/update/:id',MainController.postUpdateTT)
+router.get('/tinhtoan/delete/:id',MainController.getDeleteTT)
+router.get('/getFile',MainController.getFile)
+router.post('/click',MainController.getClick)
+
+module.exports = router
