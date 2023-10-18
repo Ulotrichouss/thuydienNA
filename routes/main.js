@@ -19,5 +19,7 @@ router.post('/tinhtoan/update/:id',MainController.postUpdateTT)
 router.get('/tinhtoan/delete/:id',MainController.getDeleteTT)
 router.get('/getFile',MainController.getFile)
 router.post('/click',MainController.getClick)
+router.get('/exportSL',MainController.getExportSL)
+router.get('/exportTT',MainController.getExportTT)
 
 module.exports = router
