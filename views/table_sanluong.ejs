@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css" />
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
   <link rel="stylesheet" href="/css/vertical-layout-light/style.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.semanticui.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
   <style>
     .template-demo>.btn {
@@ -28,6 +28,7 @@
 
     .dataTables_wrapper .dataTable .btn i {
       font-size: 1rem;
+      margin-right: 0;
     }
   </style>
 </head>
@@ -118,19 +119,19 @@
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
                     <p class="card-title">Sản lượng</p>
-                    <div class="template-demo">
+                    <div class="template-demo" style="display: flex;">
                       <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/createSL'">
                         <i class="ti-plus"></i>
                       </button>
                       <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/exportSL'">
                         <i class="ti-export"></i>
                       </button>
-                    </div>
-                    <!-- <div id="rangeTime"
-                      style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+                      <div id="rangeTime"
+                      style="background: #fff; cursor: pointer; padding: 10px; border: 1px solid #ccc;">
                       <i class="fa fa-calendar"></i>&nbsp;
                       <span></span> <i class="fa fa-caret-down"></i>
-                    </div> -->
+                    </div>
+                    </div>
                   </div>
                   <div class="table-responsive">
                     <table class="table-striped ui celled table" id="example">
@@ -148,8 +149,10 @@
                           <tr>
                             <td><%- item.time %></td>
                             <td><%- item.congsuat %></td>
-                            <td><%- item.giadien %></td>
-                            <td><%- item.tongtien %></td>
+                            <td><%- new Intl.NumberFormat('vi-VN', 
+                              { style: 'currency', currency: 'VND',minimumFractionDigits: 3 }).format(item.giadien) %></td>
+                            <td><%- new Intl.NumberFormat('vi-VN', 
+                              { style: 'currency', currency: 'VND' }).format(item.tongtien)  %></td>
                             <td>
                               <div class="template-demo">
                                 <button class="btn btn-primary btn-rounded btn-icon"
@@ -175,6 +178,9 @@
       </div>
     </div>
   </div>
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/template.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.semanticui.min.js"></script>
@@ -254,12 +260,14 @@
             a.remove();
           });
       });
+      
     });
   </script>
   <script>
     $(document).ready(function () {
       new DataTable("#example");
     });
+
   </script>
 </body>
 

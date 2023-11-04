@@ -120,12 +120,11 @@
                   <div class="d-flex justify-content-between">
                     <p class="card-title">Tính toán</p>
                     <div class="template-demo">
-                      <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/createTT'">
-                        <i class="ti-plus"></i>
+                      <button type="button" class="btn btn-primary btn-icon-text" onclick="location.href='/createTT'">
+                        <i class="ti-plus btn-icon-prepend"></i>Tính toán
                       </button>
-                      <button class="btn btn-primary btn-rounded btn-icon" id="exportData" title="Export All Data"
-                        onclick="location.href='/exportTT'">
-                        <i class="ti-export"></i>
+                      <button type="button" class="btn btn-primary btn-icon-text" id="exportData" onclick="location.href='/exportTT'">
+                        <i class="ti-export btn-icon-prepend"></i>Export Data
                       </button>
                     </div>
                   </div>
@@ -180,9 +179,6 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.semanticui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script>
     $(document).ready(function () {
       new DataTable("#example");

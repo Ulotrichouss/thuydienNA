@@ -2,12 +2,13 @@ const Tinhtoan = require("../models/tinhtoan.js");
 const Buocxa = require("../models/buocxa.js");
 const Hochua = require("../models/hochua.js");
 const Sanluong = require("../models/sanluong.js");
+const Taikhoan = require("../models/taikhoan.js");
+const Download = require("../models/download.js");
 const reader = require("xlsx");
 const excelJS = require("exceljs");
 
 module.exports = {
   getMain: async (req, res) => {
-    
     res.render("bieudo")
   },
 
@@ -24,6 +25,16 @@ module.exports = {
   getTinhtoan: async (req, res) => {
     const data = await Tinhtoan.find({});
     res.render("table_tinhtoan", { table: data });
+  },
+
+  getAccount: async (req, res) => {
+    const data = await Taikhoan.find({})
+    res.render('table_taikhoan',{table:data})
+  },
+
+  getDownload: async (req, res) => {
+    const data = await Download.find({})
+    res.render('table_download',{table:data})
   },
 
   getAddTT: async (req, res) => {
@@ -104,13 +115,16 @@ module.exports = {
         time: datetime,
         congsuat: req.body.congsuat,
         giadien: req.body.giadien,
-        tongtien: req.body.congsuat * req.body.giadien * 1000
+        tongtien: req.body.congsuat*req.body.giadien*1000,
       });
       data.save();
     } else {
       let data = await Sanluong.findOneAndUpdate(
         { time: datetime },
-        { congsuat: req?.body?.congsuat, giadien: req?.body?.giadien },
+        { congsuat: req.body.congsuat, 
+          giadien: req.body.giadien,
+          tongtien: req.body.congsuat*req.body.giadien*1000,
+        },
         { new: true, upsert: true }
       );
     }
@@ -326,13 +340,7 @@ module.exports = {
   },
 
   getFetchData: async (req, res) => {
-    const arrTime = [],
-          arrData = []
     const data = await Sanluong.find({})
-    // Object.keys(data).forEach( function(key) {
-    //   arrTime.push(data[key].time)
-    //   arrData.push(data[key].tongtien)
-    // })
     return res.json(data)
   }
 };
