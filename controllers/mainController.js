@@ -7,9 +7,19 @@ const Download = require("../models/download.js");
 const reader = require("xlsx");
 const excelJS = require("exceljs");
 
+function changeTime(time) {
+  let data = new Date(time)
+  data.setDate(data.getDate()-1)
+  return data.toISOString().slice(0,10)
+}
+
 module.exports = {
+  changeTime: changeTime,
+
   getMain: async (req, res) => {
-    res.render("bieudo")
+    const month = new Date()
+    const data = await Sanluong.find({month:(month.getMonth()+1)}).sort({time:-1})
+    res.render("bieudo",{getDt:data})
   },
 
   getBuocxa: async (req, res) => {
@@ -18,8 +28,21 @@ module.exports = {
   },
 
   getSanluong: async (req, res) => {
-    const data = await Sanluong.find({});
-    res.render("table_sanluong", { table: data });
+    let datetime = new Date();
+    datetime.setHours(datetime.getHours()+7);
+    let time = datetime.toISOString().slice(0,10)
+    // let check = await Sanluong.find({ time })
+    // if (Object.keys(check).length == 0) {
+    //   let data = new Sanluong({
+    //     time: time,
+    //     electric_output: "",
+    //     revenue: "",
+    //     tongtien: 0,
+    //   });
+    //   data.save();
+    // }
+    const data = await Sanluong.find({}).sort({time:-1})
+    res.render("table_sanluong", { table: data })
   },
 
   getTinhtoan: async (req, res) => {
@@ -71,14 +94,58 @@ module.exports = {
     res.redirect("/");
   },
 
-  postUpdateSL: async (req, res) => {
-    const data = await Sanluong.findByIdAndUpdate(req.params.id, {
-      congsuat: req.body.congsuat,
-      giadien: req.body.giadien,
-      tongtien: req.body.congsuat * req.body.giadien * 1000,
-    });
-    data.save();
-    res.redirect("/sanluong");
+  postUpdateRSL: async (req, res) => {
+    try {
+      const data = await Sanluong.findByIdAndUpdate(req.params.id,{
+        revenue: req.body.revenue,
+        revenue_month: req.body.revenue,
+        revenue_year: req.body.revenue,
+      },{ new:true, upsert:true, returnDocument:true})
+      
+      const findData = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+      for(let i = 1;i < findData.length;i++) {
+        const find = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+        await Sanluong.updateOne(
+          { "_id":find[i]._id },
+          { $set : {
+            revenue_month: Number(find[i].revenue) + Number(find[i-1].revenue_month),
+            revenue_year: Number(find[i].revenue) + Number(find[i-1].revenue_year) 
+          }},
+          { new:true }
+        )
+      }
+
+      res.redirect("/sanluong")
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  postUpdateESL: async (req, res) => {
+    try {
+      const data = await Sanluong.findByIdAndUpdate(req.params.id,{
+        electric_output: req.body.electric,
+        accumulated_month: req.body.electric,
+        accumulated_year: req.body.electric,
+      },{ new:true, upsert:true, returnDocument:true})
+      
+      const findData = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+      for(let i = 1;i < findData.length;i++) {
+        const find = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+        await Sanluong.updateOne(
+          { "_id":find[i]._id },
+          { $set : {
+            accumulated_month: Number(find[i].electric_output) + Number(find[i-1].accumulated_month),
+            accumulated_year: Number(find[i].electric_output) + Number(find[i-1].accumulated_year) 
+          }},
+          { new:true }
+        )
+      }
+
+      res.redirect("/sanluong")
+    } catch (error) {
+      console.log(error)
+    }
   },
 
   postCreateTT: async (req, res) => {
@@ -107,38 +174,9 @@ module.exports = {
     res.json("success");
   },
 
-  postCreateSL: async (req, res) => {
-    let datetime = new Date().toISOString().slice(0, 10);
-    let check = await Sanluong.find({ datetime });
-    if (Object.keys(check).length > 0) {
-      let data = new Sanluong({
-        time: datetime,
-        congsuat: req.body.congsuat,
-        giadien: req.body.giadien,
-        tongtien: req.body.congsuat*req.body.giadien*1000,
-      });
-      data.save();
-    } else {
-      let data = await Sanluong.findOneAndUpdate(
-        { time: datetime },
-        { congsuat: req.body.congsuat, 
-          giadien: req.body.giadien,
-          tongtien: req.body.congsuat*req.body.giadien*1000,
-        },
-        { new: true, upsert: true }
-      );
-    }
-    res.redirect("/sanluong");
-  },
-
   getDeleteTT: async (req, res) => {
     const del = await Tinhtoan.findByIdAndDelete(req.params.id);
     res.redirect("/");
-  },
-
-  getDeleteSL: async (req, res) => {
-    const del = await Sanluong.findByIdAndDelete(req.params.id);
-    res.redirect("/sanluong");
   },
 
   getFile: async (req, res) => {

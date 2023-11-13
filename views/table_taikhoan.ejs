@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Tính thủy văn</title>
-  <link rel="stylesheet" href="/vendors/feather/feather.css">
+  <link rel="stylesheet" href="/vendors/feather/feather.css" />
   <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css" />
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
   <link rel="stylesheet" href="/css/vertical-layout-light/style.css" />
@@ -17,7 +17,6 @@
     .template-demo>.btn {
       margin-top: 0px !important;
     }
-
     .ui.grid {
       margin: 0;
     }
@@ -29,6 +28,7 @@
 
     .dataTables_wrapper .dataTable .btn i {
       font-size: 1rem;
+      margin-right: 0;
     }
   </style>
 </head>
@@ -88,7 +88,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/">
               <i class="icon-grid menu-icon"></i>
-              <span class="menu-title">Tổng quan</span>
+              <span class="menu-title">Main</span>
             </a>
           </li>
           <li class="nav-item">
@@ -118,28 +118,47 @@
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex justify-content-between">
-                    <p class="card-title">Bước xả</p>
+                    <p class="card-title">Tài khoản</p>
+                    <div class="template-demo">
+                      <button class="btn btn-primary btn-rounded btn-icon" onclick="location.href='/createAccount'">
+                        <i class="ti-plus"></i>
+                      </button>
+                    </div>
                   </div>
                   <div class="table-responsive">
-                    <table class="table-striped table ui celled" id="example">
+                    <table class="table-striped ui celled table" id="example">
                       <thead>
                         <tr>
-                          <th>Bước</th>
-                          <th>Độ mở</th>
-                          <th>Cửa xả</th>
-                          <th>Cao trình 235</th>
-                          <th>Cao trình 240</th>
+                          <th class="font-weight-bold">Tên người dùng</th>
+                          <th>Tên tài khoản</th>
+                          <th>Ngày đăng nhập</th>
+                          <th>Trạng thái</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
                         <% table.forEach(function(item) { %>
                           <tr>
-                            <td class=" select-checkbox"><%- item.buoc %></td>
-                            <td><%- item.domo %></td>
-                            <td><%- item.cuaxa %></td>
-                            <td><%- item.trinh235 %></td>
-                            <td><%- item.trinh240 %></td>
+                            <td><%- item.name %></td>
+                            <td><%- item.username %></td>
+                            <td><%- item.timelogin %></td>
+                            <td class="font-weight-medium">
+                                <div class="badge badge-success">Completed</div>
+                            </td>
+                            <td>
+                              <div class="template-demo">
+                                <button class="btn btn-primary btn-rounded btn-icon"
+                                  onclick="location.href='/account/edit/<%- item._id%>'">
+                                  <i class="ti-pencil-alt"></i>
+                                </button>
+                                <button class="btn btn-primary btn-rounded btn-icon"
+                                  onclick="location.href='/account/delete/<%- item._id%>'">
+                                  <i class="ti-trash"></i>
+                                </button>
+                              </div>
+                            </td>
                             <% }) %>
+                          </tr>
                       </tbody>
                     </table>
                   </div>
@@ -159,6 +178,9 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.semanticui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script>
     $(document).ready(function () {
       new DataTable("#example");

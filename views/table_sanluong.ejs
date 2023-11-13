@@ -88,7 +88,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/">
               <i class="icon-grid menu-icon"></i>
-              <span class="menu-title">Main</span>
+              <span class="menu-title">Tổng quan</span>
             </a>
           </li>
           <li class="nav-item">
@@ -134,39 +134,85 @@
                     </div>
                   </div>
                   <div class="table-responsive">
-                    <table class="table-striped ui celled table" id="example">
+                    <table class="table-striped ui celled table text-center" id="example">
                       <thead>
                         <tr>
-                          <th>Thời gian</th>
-                          <th>Công suất phát P (MW)</th>
-                          <th>Giá điện (VNĐ)</th>
-                          <th>Thành tiền</th>
-                          <th></th>
+                          <th rowspan="2">STT</th>
+                          <th rowspan="2">Thời gian</th>
+                          <th rowspan="2">Sản lượng điện (Kwh)</th>
+                          <th colspan="2">Sản lượng lũy kế (Kwh)</th>
+                          <th rowspan="2">Doanh thu (VNĐ)</th>
+                          <th colspan="2">Doanh thu lũy kế (VNĐ)</th>
+                          <!-- <th></th> -->
+                        </tr>
+                        <tr>
+                          <th>Tháng</th>
+                          <th>Năm</th>
+                          <th>Tháng</th>
+                          <th>Năm</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% table.forEach(function(item) { %>
-                          <tr>
+                        <% table.forEach(function(item,i) { %>
+                          <tr id="<%- item._id %>">
+                            <td><%- i+1 %></td>
                             <td><%- item.time %></td>
-                            <td><%- item.congsuat %></td>
-                            <td><%- new Intl.NumberFormat('vi-VN', 
-                              { style: 'currency', currency: 'VND',minimumFractionDigits: 3 }).format(item.giadien) %></td>
-                            <td><%- new Intl.NumberFormat('vi-VN', 
-                              { style: 'currency', currency: 'VND' }).format(item.tongtien)  %></td>
-                            <td>
-                              <div class="template-demo">
-                                <button class="btn btn-primary btn-rounded btn-icon"
-                                  onclick="location.href='/sanluong/edit/<%- item._id%>'">
-                                  <i class="ti-pencil-alt"></i>
-                                </button>
-                                <button class="btn btn-primary btn-rounded btn-icon"
-                                  onclick="location.href='/sanluong/delete/<%- item._id%>'">
-                                  <i class="ti-trash"></i>
-                                </button>
-                              </div>
-                            </td>
-                            <% }) %>
+                            <%if( item.electric_output === null ) {  %>
+                              <td class="text-right" data-toggle="modal" data-target="#updateElectric<%- item._id %>">-</td>
+                              <% } else { %>
+                              <td class="text-right" data-toggle="modal" data-target="#updateElectric<%- item._id %>">
+                                <%- new Intl.NumberFormat().format(item.electric_output) %> </td>
+                              <% } %>
+                            <td class="text-right"><%- new Intl.NumberFormat().format(item.accumulated_month) %></td>
+                            <td class="text-right"><%- new Intl.NumberFormat().format(item.accumulated_year) %></td>
+                            <%if( item.revenue === null ) {  %>
+                              <td class="text-right" data-toggle="modal" data-target="#updateRevenue<%- item._id %>">-</td>
+                              <% } else { %>
+                              <td class="text-right" data-toggle="modal" data-target="#updateRevenue<%- item._id %>">
+                                <%- new Intl.NumberFormat().format(item.revenue) %> </td>
+                            <% } %>
+                            <td class="text-right"><%- new Intl.NumberFormat().format(item.revenue_month) %></td>
+                            <td class="text-right"><%- new Intl.NumberFormat().format(item.revenue_year) %></td>  
                           </tr>
+                          <div id="updateElectric<%- item._id %>" class="modal fade" tabindex="-1" role="dialog"
+                          aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <form action="/sanluong/update/electric/<%- item._id%>" method="POST">
+                                  <div class="modal-body">					
+                                    <div class="form-group">
+                                      <label>Sản lượng điện (Kwh) (<%- item.time %>)</label>
+                                      <input type="text" class="form-control" name="electric" id="electric" value="<%- item.electric_output %>">
+                                    </div>				
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary mr-2">Đồng ý</button>
+                                    <button class="btn btn-light" data-dismiss="modal">Hủy</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="updateRevenue<%- item._id %>" class="modal fade" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <form action="/sanluong/update/revenue/<%- item._id%>" method="POST">
+                                    <div class="modal-body">					
+                                      <div class="form-group">
+                                        <label>Doanh thu (VNĐ) (<%- item.time %>)</label>
+                                        <input type="text" class="form-control" name="revenue" id="revenue" value="<%- item.revenue %>">
+                                      </div>				
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn btn-primary mr-2">Đồng ý</button>
+                                      <button class="btn btn-light" data-dismiss="modal">Hủy</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                        <% }) %>
                       </tbody>
                     </table>
                   </div>
@@ -179,6 +225,7 @@
     </div>
   </div>
   <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/js/off-canvas.js"></script>
   <script src="/js/hoverable-collapse.js"></script>
   <script src="/js/template.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
@@ -267,7 +314,6 @@
     $(document).ready(function () {
       new DataTable("#example");
     });
-
   </script>
 </body>
 
