@@ -30,4 +30,4 @@ mongoose
   .then(() => console.log("Connect DB Success"))
   .catch((err) => console.error(err))
 
-http.listen(port, () => console.log(`http://127.0.0.1:${port}`));
+http.listen(port, () => console.log(`http://localhost:${port}`));
