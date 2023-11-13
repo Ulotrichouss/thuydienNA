@@ -15,10 +15,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
-
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(express.static("public"));
+app.use(express.static(__dirname + '/public'));
 app.set("view engine", "ejs");
 
 app.use(route);
@@ -31,4 +30,4 @@ mongoose
   .then(() => console.log("Connect DB Success"))
   .catch((err) => console.error(err))
 
-http.listen(port, () => console.log(`http://localhost:${port}`));
+http.listen(port, () => console.log(`http://127.0.0.1:${port}`));
