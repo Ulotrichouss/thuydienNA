@@ -17,9 +17,7 @@ module.exports = {
   changeTime: changeTime,
 
   getMain: async (req, res) => {
-    const month = new Date()
-    const data = await Sanluong.find({month:(month.getMonth()+1)}).sort({time:-1})
-    res.render("bieudo",{getDt:data})
+    res.render("bieudo")
   },
 
   getBuocxa: async (req, res) => {
@@ -64,18 +62,9 @@ module.exports = {
     res.render("form_addTT");
   },
 
-  getAddSL: async (req, res) => {
-    res.render("form_addSL");
-  },
-
   getEditTT: async (req, res) => {
     const data = await Tinhtoan.findById({ _id: req.params.id });
     res.render("form_editTT", { data: data });
-  },
-
-  getEditSL: async (req, res) => {
-    const data = await Sanluong.findById({ _id: req.params.id });
-    res.render("form_editSL", { data: data });
   },
 
   postUpdateTT: async (req, res) => {
@@ -225,38 +214,51 @@ module.exports = {
 
   getExportAllSL: async (req, res) => {
     try {
-      const data = await Sanluong.find({});
+      const data = await Sanluong.find({}).sort({time:-1})
       let dt = [];
-      data.forEach((element) => {
-        const { congsuat, giadien, tongtien, time } = element;
-        dt.push({ time, congsuat, giadien, tongtien });
+      data.forEach((element,i) => {
+        const { electric_output, accumulated_month, accumulated_year, revenue, revenue_month, revenue_year, time } = element
+        dt.push({i,time, electric_output, accumulated_month, accumulated_year, revenue, revenue_month, revenue_year})
       });
       const workbook = new excelJS.Workbook();
       const worksheet = workbook.addWorksheet("Data");
 
       worksheet.columns = [
-        { header: "Thời gian", key: "time", width: 15 },
-        { header: "Công suất phát P (MW)", key: "congsuat", width: 10 },
-        { header: "Giá điện (VNĐ)", key: "giadien", width: 15 },
-        { header: "Thành tiền", key: "tongtien", width: 20 },
+        { header: "STT", key: "i", width: 5 },
+        { header: "Thời gian", key: "time", width: 12 },
+        { header: "Sản lượng điện (Kwh)", key: "electric_output", width: 20 },
+        ["Sản lượng lũy kế (Kwh)",{
+          header: "Tháng", key: "accumulated_month", width: 15
+        },{
+          header: "Năm", key: "accumulated_year", width: 15
+        }],
+        { header: "Doanh thu (VNĐ)", key: "revenue", width: 30 },
+        { header: "Doanh thu lũy kế (VNĐ)", width: 30,  },
       ];
 
-      dt.forEach((form) => {
-        worksheet.addRow(form);
-      });
+      worksheet.mergeCells('A1:A2')
+      worksheet.mergeCells('B1:B2')
+      worksheet.mergeCells('C1:C2')
+      worksheet.mergeCells('D1:E1')
+      worksheet.mergeCells('F1:F2')
+      worksheet.mergeCells('G1:H1')
 
+      dt.forEach((form) => {
+        worksheet.addRow(form)
+      })
+      
       res.setHeader(
         "Content-Type",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
+      )
       res.setHeader(
         "Content-Disposition",
         "attachment; filename=" + "DataSL.xlsx"
-      );
+      )
 
-      workbook.xlsx.write(res).then(() => res.end());
+      workbook.xlsx.write(res).then(() => res.end())
     } catch (err) {
-      return res.json(err);
+      console.log(err)
     }
   },
 
@@ -379,6 +381,12 @@ module.exports = {
 
   getFetchData: async (req, res) => {
     const data = await Sanluong.find({})
+    return res.json(data)
+  },
+
+  getMonthData: async (req, res) => {
+    const month = new Date()
+    const data = await Sanluong.find({month:(month.getMonth()+1)}).sort({time:-1})
     return res.json(data)
   }
 };

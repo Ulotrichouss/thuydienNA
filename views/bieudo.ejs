@@ -2,278 +2,230 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Tính thủy văn</title>
-    <link rel="stylesheet" href="/vendors/feather/feather.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Tính thủy văn</title>
+  <link rel="stylesheet" href="/vendors/feather/feather.css" />
   <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css" />
   <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
   <link rel="stylesheet" href="/css/vertical-layout-light/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.semanticui.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
-    <style>
-        .template-demo>.btn {
-            margin-top: 0px !important;
-        }
+  <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
+  <style>
+    .template-demo>.btn {
+      margin-top: 0px !important;
+    }
 
-        .ui.grid {
-            margin: 0;
-        }
-    </style>
+    .ui.grid {
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container-scroller">
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="/"><img
-                src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" class="mr-2" alt="logo" /></a>
-            <a class="navbar-brand brand-logo-mini" href="/"><img
-                src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" alt="logo" /></a>
-          </div>
-          <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-              <span class="icon-menu"></span>
-            </button>
-            <ul class="navbar-nav mr-lg-2">
-              <li class="nav-item nav-search d-none d-lg-block">
-                <div class="input-group">
-                  <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                    <span class="input-group-text" id="search">
-                      <i class="icon-search"></i>
-                    </span>
-                  </div>
-                  <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now"
-                    aria-label="search" aria-describedby="search" />
-                </div>
-              </li>
-            </ul>
-            <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item nav-profile dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                  <img src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" alt="profile" />
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                  <a class="dropdown-item">
-                    <i class="ti-settings text-primary"></i>
-                    Settings
-                  </a>
-                  <a class="dropdown-item">
-                    <i class="ti-power-off text-primary"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
-            </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-              data-toggle="offcanvas">
-              <span class="icon-menu"></span>
-            </button>
-          </div>
-        </nav>
-        <div class="container-fluid page-body-wrapper">
-          <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link" href="/">
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Tổng quan</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tinhtoan">
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Tính toán</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/buocxa">
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Bước xả</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/sanluong">
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Sản lượng</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-            <div class="main-panel">
-                <div class="content-wrapper">
-                    <div class="row">
-                        <div class="col-lg-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <p class="card-title">Biểu đồ</p>
-                                        <div class="template-demo">
-                                            <button class="btn btn-primary btn-rounded btn-icon" id="exportData"
-                                                title="Export All Data" onclick="clickData()">
-                                                <i class="ti-export"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="chartCard">
-                                        <div class="chartBox">
-                                            <input type="month" onchange="filterChart(this)">
-                                            <button onclick="reset()">Reset</button>
-                                            <button onclick="updateData()">Show</button>
-                                            <canvas id="myChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+  <div class="container-scroller">
+    <%- include('setting.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('menu.ejs') %>
+          <div class="main-panel">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <p class="card-title">Biểu đồ</p>
+                        <div class="template-demo">
+                          <button class="btn btn-primary btn-rounded btn-icon" id="exportData" title="Export All Data"
+                            onclick="clickData()">
+                            <i class="ti-export"></i>
+                          </button>
                         </div>
+                      </div>
+                      <div class="chartCard">
+                        <div class="chartBox">
+                          <input type="month" onchange="filterChart(this)">
+                          <button onclick="reset()">Reset</button>
+                          <button onclick="updateData()">Show</button>
+                          <canvas id="myChart"></canvas>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-    <script src="/vendors/js/vendor.bundle.base.js"></script>
-    <script src="/js/off-canvas.js"></script>
-    <script src="/js/hoverable-collapse.js"></script>
-    <script src="/js/template.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script>
-        function updateData() {
-            async function fetchData() {
-                const response = await fetch('/fetch')
-                const data = await response.json()
-                return data
-            }
-            fetchData().then(point => {
-                const dataTime = point.map(function (index) {
-                    return index.time
-                })
-                const dataElectric = point.map(function (index) {
-                    return index.electric_output
-                })
-                const dataRevenue = point.map(function (index) {
-                    return index.revenue
-                })
-
-                barChart.config.data.labels = dataTime;
-                barChart.config.data.datasets[0].data = dataElectric;
-                barChart.config.data.datasets[1].data = dataRevenue;
-                barChart.update();
-            })
-        };
-        const arrElec = [];
-        const arrRev = [];
-        const arrTime = [];
-        getDt.forEach(function(item) {
-          arrElec.push(item.electric_output)
-          arrRev.push(item.revenue)
-          arrTime.push(item.time)
+          </div>
+      </div>
+  </div>
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/template.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script>
+    function updateData() {
+      async function fetchData() {
+        const response = await fetch('/fetch')
+        const data = await response.json()
+        return data
+      }
+      fetchData().then(point => {
+        const dataTime = point.map(function (index) {
+          return index.time
         })
+        const dataElectric = point.map(function (index) {
+          return index.electric_output
+        })
+        const dataRevenue = point.map(function (index) {
+          return index.revenue
+        })
+        console.log(dataElectric)
+        barChart.config.data.labels = dataTime;
+        barChart.config.data.datasets[0].data = dataElectric;
+        barChart.config.data.datasets[1].data = dataRevenue;
+        barChart.update();
+      })
+    };
 
-        const min = arrTime.reduce((min, c) => c < min ? c : min) // 'aab'
-        const max = arrTime.reduce((max, c) => c > max ? c : max)
-        const data = {
-            labels: [],
-            datasets: [{
-                label: 'Sản lượng điện',
-                data: arrElec,
-                borderWidth: 1
-            },{
-                label: 'Doanh thu',
-                data: arrRev,
-                borderWidth: 1
-            }]
-        };
+    async function fetchMonth() {
+      const response = await fetch('/fetch-month')
+      const data = await response.json()
 
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                scales: {
-                    x: {
-                        min: minT,
-                        max: maxT,
-                        type: "time",
-                        time: {
-                            unit: 'day'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+      const arrElec = data.map(index => {
+        return index.electric_output
+      })
+      const arrRev = data.map(index => {
+        return index.revenue
+      })
+      const arrTime = data.map(index => {
+        return index.time
+      })
+
+      let minDate = arrTime.reduce((min, current) => (current < min ? current : min));
+      let maxDate = new Date(arrTime.reduce((max, current) => (current > max ? current : max)));
+      let arr = [1, 3, 5, 7, 8, 10, 12]
+      if (arr.includes(maxDate.getMonth() + 1)) {
+        maxDate.setDate("31")
+      } else if ((maxDate.getMonth() + 1) == 2) {
+        maxDate.setDate("28")
+      } else {
+        maxDate.setDate("30")
+      }
+      barChart.config.data.labels = arrTime;
+      barChart.config.data.datasets[0].data = arrElec;
+      barChart.config.data.datasets[1].data = arrRev;
+      barChart.config.options.scales.x.min = minDate;
+      barChart.config.options.scales.x.max = maxDate.toISOString().slice(0,10);
+      barChart.update();
+    }
+
+    fetchMonth()
+
+    const data = {
+      labels: [],
+      datasets: [{
+        label: 'Sản lượng điện',
+        data: [],
+        borderWidth: 1
+      }, {
+        label: 'Doanh thu',
+        data: [],
+        borderWidth: 1
+      }]
+    };
+
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        scales: {
+          x: {
+            min: [],
+            max: [],
+            type: "time",
+            time: {
+              unit: 'day'
             }
-        };
-
-        const barChart = new Chart(
-            document.getElementById('myChart').getContext('2d'),
-            config
-        );
-
-        function filterChart(date) {
-            const year = date.value.substring(0, 4);
-            const month = date.value.substring(5, 7);
-
-            const lastDay = (y, m) => {
-                return new Date(y, m, 0).getDate()
-            };
-
-            const startDate = `${date.value}-01`;
-            const endDate = `${date.value}-${lastDay(year, month)}`;
-
-            barChart.config.options.scales.x.min = startDate;
-            barChart.config.options.scales.x.max = endDate;
-            barChart.update();
-        };
-
-        function reset() {
-            barChart.config.options.scales.x.min = "2023-01-01";
-            barChart.config.options.scales.x.max = "2023-12-31";
-            barChart.update();
+          },
+          y: {
+            beginAtZero: true
+          }
         }
+      }
+    };
 
-        function clickData() {
-            function getData(time) {
-                let date = time.slice(8, 10)
-                let num = Number(date);
-                let add = (++num).toString().padStart(2, '0');
-                let result = time.replace(date, add);
-                return result;
-            }
+    const barChart = new Chart(
+      document.getElementById('myChart').getContext('2d'),
+      config
+    );
 
-            fetch('/download', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Expose-Headers': 'Content-Disposition'
-                },
-                body: JSON.stringify({
-                    dateStart: barChart.config.options.scales.x.min,
-                    dateEnd: getData(barChart.config.options.scales.x.max)
-                })
-            }).then(res => {
-                const disposition = res.headers.get('Content-Disposition');
-                filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
-                if (filename.toLowerCase().startsWith("utf-8''"))
-                    filename = decodeURIComponent(filename.replace(/utf-8''/i, ''));
-                else
-                    filename = filename.replace(/['"]/g, '');
-                return res.blob();
-            }).then(blob => {
-                var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-            });
-        };
-    </script>
+    function filterChart(date) {
+      const year = date.value.substring(0, 4);
+      const month = date.value.substring(5, 7);
+
+      const lastDay = (y, m) => {
+        return new Date(y, m, 0).getDate()
+      };
+
+      const startDate = `${date.value}-01`;
+      const endDate = `${date.value}-${lastDay(year, month)}`;
+
+      barChart.config.options.scales.x.min = startDate;
+      barChart.config.options.scales.x.max = endDate;
+      barChart.update();
+    };
+
+    function reset() {
+      barChart.config.options.scales.x.min = "2023-01-01";
+      barChart.config.options.scales.x.max = "2023-12-31";
+      barChart.update();
+    }
+
+    function clickData() {
+      function getData(time) {
+        let date = time.slice(8, 10)
+        let num = Number(date);
+        let add = (++num).toString().padStart(2, '0');
+        let result = time.replace(date, add);
+        return result;
+      }
+
+      fetch('/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Expose-Headers': 'Content-Disposition'
+        },
+        body: JSON.stringify({
+          dateStart: barChart.config.options.scales.x.min,
+          dateEnd: getData(barChart.config.options.scales.x.max)
+        })
+      }).then(res => {
+        const disposition = res.headers.get('Content-Disposition');
+        filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
+        if (filename.toLowerCase().startsWith("utf-8''"))
+          filename = decodeURIComponent(filename.replace(/utf-8''/i, ''));
+        else
+          filename = filename.replace(/['"]/g, '');
+        return res.blob();
+      }).then(blob => {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    };
+  </script>
 </body>
+
 </html>
