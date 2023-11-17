@@ -4,20 +4,39 @@ const Hochua = require("../models/hochua.js");
 const Sanluong = require("../models/sanluong.js");
 const Taikhoan = require("../models/taikhoan.js");
 const Download = require("../models/download.js");
-const reader = require("xlsx");
 const excelJS = require("exceljs");
+const excel = require('excel4node');
+const cron = require('node-cron');
+const axios = require('axios');
 
 function changeTime(time) {
   let data = new Date(time)
-  data.setDate(data.getDate()-1)
-  return data.toISOString().slice(0,10)
+  data.setDate(data.getDate() - 1)
+  return data.toISOString().slice(0, 10)
 }
+
+// const fetchDataJob = async () => {
+//   try {
+//     const response = await axios.get('/checktime')
+//   } catch (error) {
+//     console.error('Error:', error.message);
+//   }
+// };
+
+// cron.schedule('* * * * *', async () => {
+//   await fetchDataJob();
+// }, {
+//   start: true, 
+//   timezone: 'Asia/Ho_Chi_Minh'
+// });
 
 module.exports = {
   changeTime: changeTime,
 
   getMain: async (req, res) => {
-    res.render("bieudo")
+    const time = new Date()
+    const data = await Sanluong.find({ time: { $gte: changeTime(time) } })
+    res.render("bieudo", { data: data })
   },
 
   getBuocxa: async (req, res) => {
@@ -26,21 +45,40 @@ module.exports = {
   },
 
   getSanluong: async (req, res) => {
-    let datetime = new Date();
-    datetime.setHours(datetime.getHours()+7);
-    let time = datetime.toISOString().slice(0,10)
-    // let check = await Sanluong.find({ time })
-    // if (Object.keys(check).length == 0) {
-    //   let data = new Sanluong({
-    //     time: time,
-    //     electric_output: "",
-    //     revenue: "",
-    //     tongtien: 0,
-    //   });
-    //   data.save();
-    // }
-    const data = await Sanluong.find({}).sort({time:-1})
+    const data = await Sanluong.find({}).sort({ time: -1 })
     res.render("table_sanluong", { table: data })
+  },
+
+  getCheckTime: async (req, res) => {
+    let acc_month,acc_year,rev_month,rev_year = 0
+    let datetime = new Date();
+    let timeCurrent = datetime.toISOString().slice(0,10)
+    datetime.setDate(datetime.getDate()-1)
+    let timeBefore = datetime.toISOString().slice(0,10)
+    const data = await Sanluong.find({time:timeCurrent})
+    const beforeData = await Sanluong.find({time:timeBefore})
+    beforeData.map(item =>{
+      acc_month = item.accumulated_month
+      acc_year = item.accumulated_year
+      rev_month = item.revenue_month
+      rev_year = item.revenue_year
+    })
+    if(data.length == 0) {
+      const createData = new Sanluong({
+        time: timeCurrent,
+        electric_output: null,
+        month: datetime.getMonth()+1,
+        year: datetime.getFullYear(),
+        accumulated_month: acc_month,
+        accumulated_year: acc_year,
+        revenue: null,
+        revenue_month: rev_month,
+        revenue_year: rev_year,
+      });
+      createData.save();
+      return console.log('Success')
+    } 
+    return console.log('Exist')
   },
 
   getTinhtoan: async (req, res) => {
@@ -50,12 +88,12 @@ module.exports = {
 
   getAccount: async (req, res) => {
     const data = await Taikhoan.find({})
-    res.render('table_taikhoan',{table:data})
+    res.render('table_taikhoan', { table: data })
   },
 
   getDownload: async (req, res) => {
     const data = await Download.find({})
-    res.render('table_download',{table:data})
+    res.render('table_download', { table: data })
   },
 
   getAddTT: async (req, res) => {
@@ -85,22 +123,24 @@ module.exports = {
 
   postUpdateRSL: async (req, res) => {
     try {
-      const data = await Sanluong.findByIdAndUpdate(req.params.id,{
+      const data = await Sanluong.findByIdAndUpdate(req.params.id, {
         revenue: req.body.revenue,
         revenue_month: req.body.revenue,
         revenue_year: req.body.revenue,
-      },{ new:true, upsert:true, returnDocument:true})
-      
-      const findData = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
-      for(let i = 1;i < findData.length;i++) {
-        const find = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+      }, { new: true, upsert: true, returnDocument: true })
+
+      const findData = await Sanluong.find({ time: { $gte: changeTime(data.time) }, month: data.month, year: data.year })
+      for (let i = 1; i < findData.length; i++) {
+        const find = await Sanluong.find({ time: { $gte: changeTime(data.time) }, month: data.month, year: data.year }).sort({ time: 1 })
         await Sanluong.updateOne(
-          { "_id":find[i]._id },
-          { $set : {
-            revenue_month: Number(find[i].revenue) + Number(find[i-1].revenue_month),
-            revenue_year: Number(find[i].revenue) + Number(find[i-1].revenue_year) 
-          }},
-          { new:true }
+          { "_id": find[i]._id },
+          {
+            $set: {
+              revenue_month: Number(find[i].revenue) + Number(find[i - 1].revenue_month),
+              revenue_year: Number(find[i].revenue) + Number(find[i - 1].revenue_year)
+            }
+          },
+          { new: true }
         )
       }
 
@@ -112,22 +152,24 @@ module.exports = {
 
   postUpdateESL: async (req, res) => {
     try {
-      const data = await Sanluong.findByIdAndUpdate(req.params.id,{
+      const data = await Sanluong.findByIdAndUpdate(req.params.id, {
         electric_output: req.body.electric,
         accumulated_month: req.body.electric,
         accumulated_year: req.body.electric,
-      },{ new:true, upsert:true, returnDocument:true})
-      
-      const findData = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
-      for(let i = 1;i < findData.length;i++) {
-        const find = await Sanluong.find({time:{$gte:changeTime(data.time)},month:data.month,year:data.year}).sort({time:1})
+      }, { new: true, upsert: true, returnDocument: true })
+
+      const findData = await Sanluong.find({ time: { $gte: changeTime(data.time) }, month: data.month, year: data.year })
+      for (let i = 1; i < findData.length; i++) {
+        const find = await Sanluong.find({ time: { $gte: changeTime(data.time) }, month: data.month, year: data.year }).sort({ time: 1 })
         await Sanluong.updateOne(
-          { "_id":find[i]._id },
-          { $set : {
-            accumulated_month: Number(find[i].electric_output) + Number(find[i-1].accumulated_month),
-            accumulated_year: Number(find[i].electric_output) + Number(find[i-1].accumulated_year) 
-          }},
-          { new:true }
+          { "_id": find[i]._id },
+          {
+            $set: {
+              accumulated_month: Number(find[i].electric_output) + Number(find[i - 1].accumulated_month),
+              accumulated_year: Number(find[i].electric_output) + Number(find[i - 1].accumulated_year)
+            }
+          },
+          { new: true }
         )
       }
 
@@ -214,49 +256,68 @@ module.exports = {
 
   getExportAllSL: async (req, res) => {
     try {
-      const data = await Sanluong.find({}).sort({time:-1})
+      const data = await Sanluong.find({}).sort({ time: -1 })
       let dt = [];
-      data.forEach((element,i) => {
+      data.forEach((element, i) => {
         const { electric_output, accumulated_month, accumulated_year, revenue, revenue_month, revenue_year, time } = element
-        dt.push({i,time, electric_output, accumulated_month, accumulated_year, revenue, revenue_month, revenue_year})
+        dt.push({ i, time, electric_output, accumulated_month, accumulated_year, revenue, revenue_month, revenue_year })
       });
-      const workbook = new excelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Data");
 
-      worksheet.columns = [
-        { header: "STT", key: "i", width: 5 },
-        { header: "Thời gian", key: "time", width: 12 },
-        { header: "Sản lượng điện (Kwh)", key: "electric_output", width: 20 },
-        ["Sản lượng lũy kế (Kwh)",{
-          header: "Tháng", key: "accumulated_month", width: 15
-        },{
-          header: "Năm", key: "accumulated_year", width: 15
-        }],
-        { header: "Doanh thu (VNĐ)", key: "revenue", width: 30 },
-        { header: "Doanh thu lũy kế (VNĐ)", width: 30,  },
-      ];
+      const wb = new excel.Workbook();
+      const ws = wb.addWorksheet('DataSheet');
 
-      worksheet.mergeCells('A1:A2')
-      worksheet.mergeCells('B1:B2')
-      worksheet.mergeCells('C1:C2')
-      worksheet.mergeCells('D1:E1')
-      worksheet.mergeCells('F1:F2')
-      worksheet.mergeCells('G1:H1')
+      const style = wb.createStyle({
+        alignment: {
+          wrapText: true,
+          horizontal: 'center',
+          vertical: 'center',
+        },
+      });
 
-      dt.forEach((form) => {
-        worksheet.addRow(form)
-      })
-      
+      ws.column(1).setWidth(5)
+      ws.column(2).setWidth(13)
+      ws.column(3).setWidth(20)
+      ws.column(4).setWidth(15)
+      ws.column(5).setWidth(15)
+      ws.column(6).setWidth(20)
+      ws.column(7).setWidth(15)
+      ws.column(8).setWidth(15)
+
+      ws.cell(1, 1, 2, 1, true).string('STT').style(style);
+      ws.cell(1, 2, 2, 2, true).string('Thời gian').style(style);
+      ws.cell(1, 3, 2, 3, true).string('Sản lượng điện (Kwh)').style(style);
+      ws.cell(1, 4, 1, 5, true).string('Sản lượng lũy kế (Kwh)').style(style);
+      ws.cell(1, 6, 2, 6, true).string('Doanh thu (VNĐ)').style(style);
+      ws.cell(1, 7, 1, 8, true).string('Doanh thu lũy kế (VNĐ)').style(style);
+
+      ws.cell(2, 4).string('Tháng').style(style);
+      ws.cell(2, 5).string('Năm').style(style);
+      ws.cell(2, 7).string('Tháng').style(style);
+      ws.cell(2, 8).string('Năm').style(style);
+
+      dt.forEach((item, index) => {
+        ws.cell(index + 3, 1).number(item.i);
+        ws.cell(index + 3, 2).string(item.time);
+        ws.cell(index + 3, 3).number(item.electric_output || 0);
+        ws.cell(index + 3, 4).number(item.accumulated_month);
+        ws.cell(index + 3, 5).number(item.accumulated_year);
+        ws.cell(index + 3, 6).number(item.revenue || 0);
+        ws.cell(index + 3, 7).number(item.revenue_month);
+        ws.cell(index + 3, 8).number(item.revenue_year);
+      });
+
       res.setHeader(
         "Content-Type",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       )
       res.setHeader(
         "Content-Disposition",
-        "attachment; filename=" + "DataSL.xlsx"
+        "attachment; filename=" + "Data.xlsx"
       )
 
-      workbook.xlsx.write(res).then(() => res.end())
+      wb.writeToBuffer().then(buffer => {
+        res.end(buffer);
+      });
     } catch (err) {
       console.log(err)
     }
@@ -267,7 +328,7 @@ module.exports = {
       const data = await Tinhtoan.find({});
       let dt = [];
       data.forEach((value) => {
-        const { nuoctruoc,dungtichtruoc, nuocsau, dungtichsau, qmay, qxa, qho, timeday, timehour } = value;
+        const { nuoctruoc, dungtichtruoc, nuocsau, dungtichsau, qmay, qxa, qho, timeday, timehour } = value;
         dt.push({ nuoctruoc, dungtichtruoc, nuocsau, dungtichsau, qho, qmay, qxa, timehour, timeday });
       });
       const workbook = new excelJS.Workbook();
@@ -309,7 +370,7 @@ module.exports = {
       const data = await Tinhtoan.find({});
       let dt = [];
       data.forEach((value) => {
-        const { nuoctruoc,dungtichtruoc, nuocsau, dungtichsau, qmay, qxa, qho, timeday, timehour } = value;
+        const { nuoctruoc, dungtichtruoc, nuocsau, dungtichsau, qmay, qxa, qho, timeday, timehour } = value;
         dt.push({ nuoctruoc, dungtichtruoc, nuocsau, dungtichsau, qho, qmay, qxa, timehour, timeday });
       });
       const workbook = new excelJS.Workbook();
@@ -347,36 +408,36 @@ module.exports = {
   },
 
   getDownloadSL: async (req, res) => {
-      const data = await Sanluong.find({"time":{$gte:req?.body?.dateStart, $lt:req?.body?.dateEnd}})
-      let dt = [];
-      data.forEach((value) => {
-        const { time,congsuat, giadien, tongtien } = value;
-        dt.push({ time,congsuat, giadien, tongtien });
-      });
-      const workbook = new excelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Data");
+    const data = await Sanluong.find({ "time": { $gte: req?.body?.dateStart, $lt: req?.body?.dateEnd } })
+    let dt = [];
+    data.forEach((value) => {
+      const { time, congsuat, giadien, tongtien } = value;
+      dt.push({ time, congsuat, giadien, tongtien });
+    });
+    const workbook = new excelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Data");
 
-      worksheet.columns = [
-        { header: "Thời gian", key: "time", width: 15 },
-        { header: "Công suất", key: "congsuat", width: 15 },
-        { header: "Giá điện", key: "giadien", width: 15 },
-        { header: "Tổng tiền", key: "tongtien", width: 15 }
-      ];
+    worksheet.columns = [
+      { header: "Thời gian", key: "time", width: 15 },
+      { header: "Công suất", key: "congsuat", width: 15 },
+      { header: "Giá điện", key: "giadien", width: 15 },
+      { header: "Tổng tiền", key: "tongtien", width: 15 }
+    ];
 
-      dt.forEach((form) => {
-        worksheet.addRow(form);
-      });
+    dt.forEach((form) => {
+      worksheet.addRow(form);
+    });
 
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
-      res.setHeader(
-        "Content-Disposition",
-        "attachment; filename=" + "Download.xlsx"
-      );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=" + "Download.xlsx"
+    );
 
-      return workbook.xlsx.write(res).then(() => res.end())
+    return workbook.xlsx.write(res).then(() => res.end())
   },
 
   getFetchData: async (req, res) => {
@@ -386,7 +447,7 @@ module.exports = {
 
   getMonthData: async (req, res) => {
     const month = new Date()
-    const data = await Sanluong.find({month:(month.getMonth()+1)}).sort({time:-1})
+    const data = await Sanluong.find({ month: (month.getMonth() + 1) }).sort({ time: -1 })
     return res.json(data)
   }
 };

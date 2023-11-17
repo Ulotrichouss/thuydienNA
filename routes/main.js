@@ -22,5 +22,6 @@ router.get('/exportTT',MainController.getExportAllTT)
 router.post('/download',MainController.getDownloadSL)
 router.get('/fetch',MainController.getFetchData)
 router.get('/fetch-month',MainController.getMonthData)
+router.get('/checktime',MainController.getCheckTime)
 
 module.exports = router
