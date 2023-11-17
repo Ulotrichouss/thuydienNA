@@ -6,29 +6,12 @@ const Taikhoan = require("../models/taikhoan.js");
 const Download = require("../models/download.js");
 const excelJS = require("exceljs");
 const excel = require('excel4node');
-const cron = require('node-cron');
-const axios = require('axios');
 
 function changeTime(time) {
   let data = new Date(time)
   data.setDate(data.getDate() - 1)
   return data.toISOString().slice(0, 10)
 }
-
-// const fetchDataJob = async () => {
-//   try {
-//     const response = await axios.get('/checktime')
-//   } catch (error) {
-//     console.error('Error:', error.message);
-//   }
-// };
-
-// cron.schedule('* * * * *', async () => {
-//   await fetchDataJob();
-// }, {
-//   start: true, 
-//   timezone: 'Asia/Ho_Chi_Minh'
-// });
 
 module.exports = {
   changeTime: changeTime,

@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const route = require('./routes/main.js');
+const cron = require('node-cron');
+const axios = require('axios');
 require("dotenv").config();
 
 const app = express();
@@ -30,4 +32,20 @@ mongoose
   .then(() => console.log("Connect DB Success"))
   .catch((err) => console.error(err))
 
-http.listen(port, () => console.log(`http://localhost:${port}`));
+async function fetchDataJob() {
+  try {
+    const response = await axios.get('http://127.0.0.1:3000/checktime')
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+};
+
+cron.schedule('0 0 * * *', async () => {
+  fetchDataJob();
+}, {
+  scheduled: true,
+  start: true,
+  timezone: 'Asia/Ho_Chi_Minh'
+});
+
+http.listen(port, () => console.log(`http://127.0.0.1:${port}`));
