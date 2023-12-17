@@ -10,6 +10,8 @@ const TinhtoanSchema = new mongoose.Schema ({
     qho: {type: String},
     timeday: {type: String},
     timehour: {type: String},
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model('tinhtoan',TinhtoanSchema)

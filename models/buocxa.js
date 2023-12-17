@@ -6,6 +6,8 @@ const BuocxaSchema = new mongoose.Schema ({
     cuaxa: { type: Number },
     trinh235: { type: String },
     trinh240: {type: String}
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model('buocxa',BuocxaSchema)

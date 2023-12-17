@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Tính thủy văn</title>
+  <link rel="stylesheet" href="/vendors/feather/feather.css" />
+  <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="/css/vertical-layout-light/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.semanticui.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
+  <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <div class="container-scroller">
+    <%- include('setting.ejs') %>
+      <div class="container-fluid page-body-wrapper">
+        <%- include('menu.ejs') %>
+          <div class="main-panel">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-md-6 grid-margin transparent">
+                  <div class="row">
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-tale">
+                        <div class="card-body">
+                          <p class="mb-4">Sản lượng hôm nay</p>
+                          <%if( data == '' || data[0].electric_output === null || data[0].electric_output == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].electric_output.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-tale">
+                        <div class="card-body">
+                          <p class="mb-4">Sản lượng tháng</p>
+                          <%if( data == '' || data[0].accumulated_month === null || data[0].accumulated_month == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].accumulated_month.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-tale">
+                        <div class="card-body">
+                          <p class="mb-4">Sản lượng năm</p>
+                          <%if( data == '' || data[0].accumulated_year === null || data[0].accumulated_year == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].accumulated_year.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-light-blue">
+                        <div class="card-body">
+                          <p class="mb-4">Doanh thu hôm nay</p>
+                          <%if(  data == '' || data[0].revenue === null || data[0].revenue == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].revenue.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-dark-blue">
+                        <div class="card-body">
+                          <p class="mb-4">Doanh thu tháng</p>
+                          <%if( data == '' || data[0].revenue_month === null || data[0].revenue_month == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].revenue_month.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4 stretch-card transparent">
+                      <div class="card card-light-danger">
+                        <div class="card-body">
+                          <p class="mb-4">Doanh thu năm</p>
+                          <%if( data == '' || data[0].revenue_year === null || data[0].revenue_year == 0 ) {  %>
+                            <p class="text-[20px] mb-2">0</p>
+                          <% } else { %>
+                            <p class="text-[20px] mb-2"><%- data[0].revenue_year.toFixed(3)%></p>
+                          <% } %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 grid-margin transparent">
+                  <div class="relative font-inter antialiased">
+                    <main
+                        class="relative flex flex-col before:absolute before:inset-0 before:from-indigo-200/60 before:to-transparent overflow-hidden">
+                        <div class="w-full max-w-2xl mx-auto px-4 md:px-6">
+                            <header x-data="{ expanded: false }"
+                                class="relative before:absolute before:inset-0 before:rounded-lg before:shadow-xl before:shadow-slate-900/5 before:bg-white before:transition-all before:duration-500 before:ease-[cubic-bezier(.5,.85,.25,1.8)]"
+                                :class="expanded ? 'before:-inset-2 before:top-0' : 'before:inset-0'">
+                                <div class="relative rounded-lg">
+                                    <div class="flex items-center px-4">
+                                        <div class="font-bold">Lưu lượng nhà máy</div>
+                                        <button id="menubutton" type="button"
+                                            class="grow flex items-center justify-end h-14 pl-4 focus-visible:outline-none group"
+                                            @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="menu">
+                                            <div class="p-1.5 group-focus-visible:ring group-focus-visible:ring-indigo-300">
+                                                <svg class="fill-slate-400 shrink-0 transition duration-300 ease-in-out"
+                                                    :class="{'rotate-[135deg]': expanded}" width="18" height="18"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="8" width="18" height="2" />
+                                                    <rect y="8" width="18" height="2" class="transform origin-center rotate-90" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <nav id="menu" role="navigation" aria-labelledby="menubutton"
+                                        class="grid text-sm text-slate-600 overflow-hidden transition-all duration-500 ease-[cubic-bezier(.5,.85,.25,1.8)] [&[x-cloak]]:hidden"
+                                        :class="expanded ? 'grid-rows-[0fr] opacity-0 invisible' : 'grid-rows-[1fr] opacity-100'"
+                                        x-cloak>
+                                        <div
+                                            class="overflow-hidden before:block before:w-full before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+                                            <div class="container_h flex">
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">H1</div>
+                                                            <div class="content_h">2023-01-01</div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h">0</div>
+                                                            <div class="content_h">(MW)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">H1</div>
+                                                            <div class="content_h">2023-01-01</div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h">0</div>
+                                                            <div class="content_h">(MW)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">H1</div>
+                                                            <div class="content_h">2023-01-01</div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h">0</div>
+                                                            <div class="content_h">(MW)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">H1</div>
+                                                            <div class="content_h">2023-01-01</div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h">0</div>
+                                                            <div class="content_h">(MW)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </header>
+                        </div>
+                    </main>
+                </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 grid-margin transparent">
+                  <div class="relative font-inter antialiased">
+                    <main
+                        class="relative flex flex-col before:absolute before:inset-0 before:from-indigo-200/60 before:to-transparent overflow-hidden">
+                        <div class="w-full max-w-2xl mx-auto px-4 md:px-6">
+                            <header x-data="{ expanded: false }"
+                                class="relative before:absolute before:inset-0 before:rounded-lg before:shadow-xl before:shadow-slate-900/5 before:bg-white before:transition-all before:duration-500 before:ease-[cubic-bezier(.5,.85,.25,1.8)]"
+                                :class="expanded ? 'before:-inset-2 before:top-0' : 'before:inset-0'">
+                                <div class="relative rounded-lg">
+                                    <div class="flex items-center px-4">
+                                        <div class="font-bold">Lưu lượng vào hồ và dự báo 1h</div>
+                                        <button id="menubutton" type="button"
+                                            class="grow flex items-center justify-end h-14 pl-4 focus-visible:outline-none group"
+                                            @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="menu">
+                                            <div class="p-1.5 group-focus-visible:ring group-focus-visible:ring-indigo-300">
+                                                <svg class="fill-slate-400 shrink-0 transition duration-300 ease-in-out"
+                                                    :class="{'rotate-[135deg]': expanded}" width="18" height="18"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="8" width="18" height="2" />
+                                                    <rect y="8" width="18" height="2" class="transform origin-center rotate-90" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <nav id="menu" role="navigation" aria-labelledby="menubutton"
+                                        class="grid text-sm text-slate-600 overflow-hidden transition-all duration-500 ease-[cubic-bezier(.5,.85,.25,1.8)] [&[x-cloak]]:hidden"
+                                        :class="expanded ? 'grid-rows-[0fr] opacity-0 invisible' : 'grid-rows-[1fr] opacity-100'"
+                                        x-cloak>
+                                        <div
+                                            class="overflow-hidden before:block before:w-full before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+                                            <div class="container_h flex">
+                                                <div class="w-full">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">Q vào - Mực nước Hồ Chứa</div>
+                                                            <div class="content_h"><%- moment(value.data[0].current_data_at).format('DD-MM-YYYY h:mm:ss')%></div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h"><%- value.data[0].current_discharge_in%></div>
+                                                            <div class="content_h">(m³/s)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-full">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">Q vào dự báo - Mực nước Hồ Chứa</div>
+                                                            <div class="content_h"><%- moment(value.data[0].current_data_at).format('DD-MM-YYYY h:mm:ss')%></div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h"><%- value.data[0].qin_forecast%></div>
+                                                            <div class="content_h">(m³/s)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </header>
+                        </div>
+                    </main>
+                </div>
+                </div>
+                <div class="col-md-6 grid-margin transparent">
+                  <div class="relative font-inter antialiased">
+                    <main
+                        class="relative flex flex-col before:absolute before:inset-0 before:from-indigo-200/60 before:to-transparent overflow-hidden">
+                        <div class="w-full max-w-2xl mx-auto px-4 md:px-6">
+                            <header x-data="{ expanded: false }"
+                                class="relative before:absolute before:inset-0 before:rounded-lg before:shadow-xl before:shadow-slate-900/5 before:bg-white before:transition-all before:duration-500 before:ease-[cubic-bezier(.5,.85,.25,1.8)]"
+                                :class="expanded ? 'before:-inset-2 before:top-0' : 'before:inset-0'">
+                                <div class="relative rounded-lg">
+                                    <div class="flex items-center px-4">
+                                        <div class="font-bold">Mực nước - Dung tích</div>
+                                        <button id="menubutton" type="button"
+                                            class="grow flex items-center justify-end h-14 pl-4 focus-visible:outline-none group"
+                                            @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="menu">
+                                            <div class="p-1.5 group-focus-visible:ring group-focus-visible:ring-indigo-300">
+                                                <svg class="fill-slate-400 shrink-0 transition duration-300 ease-in-out"
+                                                    :class="{'rotate-[135deg]': expanded}" width="18" height="18"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect y="8" width="18" height="2" />
+                                                    <rect y="8" width="18" height="2" class="transform origin-center rotate-90" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <nav id="menu" role="navigation" aria-labelledby="menubutton"
+                                        class="grid text-sm text-slate-600 overflow-hidden transition-all duration-500 ease-[cubic-bezier(.5,.85,.25,1.8)] [&[x-cloak]]:hidden"
+                                        :class="expanded ? 'grid-rows-[0fr] opacity-0 invisible' : 'grid-rows-[1fr] opacity-100'"
+                                        x-cloak>
+                                        <div
+                                            class="overflow-hidden before:block before:w-full before:h-px before:bg-gradient-to-r before:from-transparent before:via-slate-200 before:to-transparent">
+                                            <div class="container_h flex">
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">Mực nước Hồ Chứa</div>
+                                                            <div class="content_h"><%- moment(value.data[0].current_data_at).format('DD-MM-YYYY h:mm:ss')%></div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h"><%- value.data[0].current_data%></div>
+                                                            <div class="content_h">(m)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-1/2">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">V - Mực nước Hồ Chứa</div>
+                                                            <div class="content_h"><%- moment(value.data[0].current_data_at).format('DD-MM-YYYY h:mm:ss')%></div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h"><%- new Intl.NumberFormat().format(value.data[0].current_volume)%></div>
+                                                            <div class="content_h">(m³)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                                <div class="w-full">
+                                                    <div class="card_h flex justify-between border-solid border-[2px] border-black m-[2px] p-4">
+                                                        <div class="card_left">
+                                                            <div class="title_h">Hạ lưu nhà máy</div>
+                                                            <div class="content_h"><%- moment(value.data[0].current_data_at).format('DD-MM-YYYY h:mm:ss')%></div>
+                                                        </div>
+                                                        <div class="card_right">
+                                                            <div class="title_h"><%- value.data[1].current_data%></div>
+                                                            <div class="content_h">(m)</div>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </header>
+                        </div>
+                    </main>
+                </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <p class="card-title">Sản lượng điện ngày</p>
+                        <div class="template-demo">
+                          <!-- <button class="btn btn-primary btn-rounded btn-icon" id="exportData" onclick="exportBieudo()">
+                            <i class="ti-export"></i>
+                          </button> -->
+                        </div>
+                      </div>
+                      <div class="chartCard">
+                        <div class="chartBox">
+                          <input type="month" onchange="filterBieudo(this)">
+                          <button onclick="viewBieudo()">Xem tất cả</button>
+                          <!-- <button onclick="showBieudo()">Show</button> -->
+                          <canvas id="chartBieudo"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between">
+                        <p class="card-title">Sản lượng và doanh thu tháng</p>
+                        <div class="template-demo">
+                          <!-- <button class="btn btn-primary btn-rounded btn-icon" id="exportData" onclick="clickData()">
+                            <i class="ti-export"></i>
+                          </button> -->
+                        </div>
+                      </div>
+                      <div class="chartCard">
+                        <div class="chartBox">
+                          <input type="text" id="yearpicker">
+                          <!-- <button onclick="viewDoanhthu()">Xem tất cả</button> -->
+                          <!-- <button onclick="updateData()">Show</button> -->
+                          <canvas id="chartDoanhthu"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+  <% if(locals.success != '') { %>
+    <script>
+      window.onload = function() {
+        Alert.success('<%- locals.success%>', 'Success', { displayDuration: 3000, pos: 'top' });
+      };
+    </script>
+  <% } else if(locals.error != '') { %>  
+    <script>
+      window.onload = function() {
+        Alert.error('<%- locals.error%>', 'Error', { displayDuration: 3000, pos: 'top' });
+      };
+    </script>
+   <% } %>
+  <script src="/vendors/js/vendor.bundle.base.js"></script>
+  <script src="/js/off-canvas.js"></script>
+  <script src="/js/hoverable-collapse.js"></script>
+  <script src="/js/template.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    var Alert = undefined;
+    (function (Alert) {
+      var alert, error, trash, info, success, warning, _container;
+      info = function (message, title, options) {
+        return alert("info", message, title, "fa fa-info-circle", options);
+      };
+      warning = function (message, title, options) {
+        return alert("warning", message, title, "fa fa-warning", options);
+      };
+      error = function (message, title, options) {
+        return alert("error", message, title, "fa fa-exclamation-circle", options);
+      };
+
+      trash = function (message, title, options) {
+        return alert("trash", message, title, "fa fa-trash-o", options);
+      };
+
+      success = function (message, title, options) {
+        return alert("success", message, title, "fa fa-check-circle", options);
+      };
+      alert = function (type, message, title, icon, options) {
+        var alertElem, messageElem, titleElem, iconElem, innerElem, _container;
+        if (typeof options === "undefined") {
+          options = {};
+        }
+        options = $.extend({}, Alert.defaults, options);
+        if (!_container) {
+          _container = $("#alerts");
+          if (_container.length === 0) {
+            _container = $("<ul>").attr("id", "alerts").appendTo($("body"));
+          }
+        }
+        if (options.width) {
+          _container.css({
+            width: options.width,
+          });
+        }
+        alertElem = $("<li>")
+          .addClass("alert")
+          .addClass("alert-" + type);
+        setTimeout(function () {
+          alertElem.addClass("open");
+        }, 1);
+        if (icon) {
+          iconElem = $("<i>").addClass(icon);
+          alertElem.append(iconElem);
+        }
+        innerElem = $("<div>").addClass("alert-block");
+        alertElem.append(innerElem);
+        if (title) {
+          titleElem = $("<div>").addClass("alert-title").append(title);
+          innerElem.append(titleElem);
+        }
+        if (message) {
+          messageElem = $("<div>").addClass("alert-message").append(message);
+          innerElem.append(messageElem);
+        }
+        if (options.displayDuration > 0) {
+          setTimeout(function () {
+            leave();
+          }, options.displayDuration);
+        } else {
+          innerElem.append("<em>Click to Dismiss</em>");
+        }
+        alertElem.on("click", function () {
+          leave();
+        });
+
+        function leave() {
+          alertElem.removeClass("open");
+          alertElem.one(
+            "webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",
+            function () {
+              return alertElem.remove();
+            }
+          );
+        }
+        return _container.prepend(alertElem);
+      };
+      Alert.defaults = {
+        width: "",
+        icon: "",
+        displayDuration: 3000,
+        pos: "",
+      };
+      Alert.info = info;
+      Alert.warning = warning;
+      Alert.error = error;
+      Alert.trash = trash;
+      Alert.success = success;
+      return (_container = void 0);
+    })(Alert || (Alert = {}));
+
+    this.Alert = Alert;
+  </script>
+  <script>
+    async function fetchBieudo() {
+      const response = await fetch('/fetch')
+      const data = await response.json()
+
+      const arrElec = data.map(index => {
+        return index.electric_output
+      })
+      const arrTime = data.map(index => {
+        return index.time
+      })
+
+      const maxDate = new Date(arrTime.reduce((max, current) => (current > max ? current : max)));
+      const minDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+      let arr = [1, 3, 5, 7, 8, 10, 12]
+      if (arr.includes(maxDate.getMonth() + 1)) {
+        maxDate.setDate("31")
+      } else if ((maxDate.getMonth() + 1) == 2) {
+        maxDate.setDate("28")
+      } else {
+        maxDate.setDate("30")
+      }
+      configBieudo.data.labels = arrTime;
+      configBieudo.data.datasets[0].data = arrElec;
+      configBieudo.options.scales.x.min = minDate;
+      configBieudo.options.scales.x.max = maxDate.toISOString().slice(0,10);
+      chartBieudo.update();
+    }
+
+    fetchBieudo()
+
+    const configBieudo = {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Sản lượng điện',
+          data: [],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            min: [],
+            max: [],
+            type: "time",
+            time: {
+              unit: 'day'
+            }
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    const chartBieudo = new Chart(
+      document.getElementById('chartBieudo').getContext('2d'),
+      configBieudo
+    );
+
+    function filterBieudo(date) {
+      const year = date.value.substring(0, 4);
+      const month = date.value.substring(5, 7);
+      const lastDay = (y, m) => {
+        return new Date(y, m, 0).getDate()
+      };
+
+      const startDate = `${date.value}-01`;
+      const endDate = `${date.value}-${lastDay(year, month)}`;
+
+      configBieudo.options.scales.x.min = startDate;
+      configBieudo.options.scales.x.max = endDate;
+      chartBieudo.update();
+    };
+
+    function viewBieudo() {
+      configBieudo.options.scales.x.min = "2023-01-01";
+      configBieudo.options.scales.x.max = "2023-12-31";
+      chartBieudo.update();
+    }
+
+    function exportBieudo() {
+      function getData(time) {
+        let date = time.slice(8, 10)
+        let num = Number(date);
+        let add = (++num).toString().padStart(2, '0');
+        let result = time.replace(date, add);
+        return result;
+      }
+
+      fetch('/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Expose-Headers': 'Content-Disposition'
+        },
+        body: JSON.stringify({
+          dateStart: configBieudo.options.scales.x.min,
+          dateEnd: getData(configBieudo.options.scales.x.max)
+        })
+      }).then(res => {
+        const disposition = res.headers.get('Content-Disposition');
+        filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
+        if (filename.toLowerCase().startsWith("utf-8''"))
+          filename = decodeURIComponent(filename.replace(/utf-8''/i, ''));
+        else
+          filename = filename.replace(/['"]/g, '');
+        return res.blob();
+      }).then(blob => {
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+    };
+  </script>
+  <script>
+    async function fetchDoanhthu() {
+      const response = await fetch('/fetch-year')
+      const data = await response.json()
+
+      const months = [
+        'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4',
+        'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8',
+        'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+      ];
+      const arrRev = data.map(index => {
+        return index.accumulated_month
+      })
+      const arrTime = data.map(index => {
+        return months[index.month-1]
+      })
+
+      configDoanhthu.data.labels = arrTime;
+      configDoanhthu.data.datasets[0].data = arrRev;
+      chartDoanhthu.update();
+    }
+
+    fetchDoanhthu()
+
+    const configDoanhthu = {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Doanh thu',
+          data: [],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    };
+
+    const chartDoanhthu = new Chart(
+      document.getElementById('chartDoanhthu').getContext('2d'),
+      configDoanhthu
+    );
+
+    function filterDoanhthu(date) {
+      const year = date.value.substring(0, 4);
+      const month = date.value.substring(5, 7);
+      const lastDay = (y, m) => {
+        return new Date(y, m, 0).getDate()
+      };
+
+      const startDate = `${date.value}-01`;
+      const endDate = `${date.value}-${lastDay(year, month)}`;
+
+      configDoanhthu.options.scales.x.min = startDate;
+      configDoanhthu.options.scales.x.max = endDate;
+      configDoanhthu.update();
+    };
+  </script>
+  <script>
+    $('#yearPicker').datetimepicker({
+      format      :   "YYYY",
+      viewMode    :   "years", 
+  });
+  </script>
+</body>
+</html>

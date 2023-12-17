@@ -3,9 +3,11 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const route = require('./routes/main.js');
+const route = require('./routes/main');
 const cron = require('node-cron');
 const axios = require('axios');
+const session = require('express-session');
+const flash = require('connect-flash');
 require("dotenv").config();
 
 const app = express();
@@ -20,8 +22,14 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.static(__dirname + '/public'));
+app.use(session({
+  secret:'secret',
+  cookie: {maxAge: 60000},
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(flash());
 app.set("view engine", "ejs");
-
 app.use(route);
 
 mongoose
@@ -45,7 +53,7 @@ cron.schedule('0 0 * * *', async () => {
 }, {
   scheduled: true,
   start: true,
-  timezone: 'Asia/Ho_Chi_Minh'
+  timezone: 'Asia/BangKok'
 });
 
-http.listen(port, () => console.log(`http://127.0.0.1:${port}`));
+http.listen(port);

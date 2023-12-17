@@ -2,17 +2,13 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Tính thủy văn</title>
-  <link rel="stylesheet" href="/vendors/feather/feather.css">
-  <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css" />
-  <link rel="stylesheet" href="/css/vertical-layout-light/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.semanticui.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
+  <link rel="stylesheet" href="../../vendors/feather/feather.css">
+  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
   <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
   <link rel="stylesheet" href="/css/style.css" />
@@ -20,43 +16,25 @@
 
 <body>
   <div class="container-scroller">
-    <%- include('setting.ejs') %>
-    <div class="container-fluid page-body-wrapper">
-      <%- include('menu.ejs') %>
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between">
-                    <p class="card-title">Bước xả</p>
-                  </div>
-                  <div class="table-responsive">
-                    <table class="table-striped table ui celled text-center" id="example">
-                      <thead>
-                        <tr>
-                          <th>Bước</th>
-                          <th>Độ mở</th>
-                          <th>Cửa xả</th>
-                          <th>Cao trình 235</th>
-                          <th>Cao trình 240</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% table.forEach(function(item) { %>
-                          <tr>
-                            <td class=" select-checkbox"><%- item.buoc %></td>
-                            <td><%- item.domo %></td>
-                            <td><%- item.cuaxa %></td>
-                            <td><%- item.trinh235 %></td>
-                            <td><%- item.trinh240 %></td>
-                            <% }) %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+              <div class="brand-logo" style="margin-bottom:0">
+                <img src="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" alt="logo" style="display: block; margin: 0 auto; width:100px">
               </div>
+              <form class="pt-3" method="POST" action="/login">
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
+                </div>
+                <div class="mt-3">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">SIGN UP</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -72,18 +50,14 @@
   <% } else if(locals.error != '') { %>  
     <script>
       window.onload = function() {
-        Alert.error('<%- locals.error%>', 'Error', { displayDuration: 3000, pos: 'top' });
+        Alert.error('<%- locals.error%>', { displayDuration: 3000, pos: 'top' });
       };
     </script>
    <% } %>
-  <script src="/vendors/js/vendor.bundle.base.js"></script>
-  <script src="/js/off-canvas.js"></script>
-  <script src="/js/hoverable-collapse.js"></script>
-  <script src="/js/template.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.semanticui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/template.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script>
     var Alert = undefined;
@@ -96,13 +70,7 @@
         return alert("warning", message, title, "fa fa-warning", options);
       };
       error = function (message, title, options) {
-        return alert(
-          "error",
-          message,
-          title,
-          "fa fa-exclamation-circle",
-          options
-        );
+        return alert( "error", message, title, "fa fa-exclamation-circle", options );
       };
 
       trash = function (message, title, options) {
@@ -190,12 +158,6 @@
     })(Alert || (Alert = {}));
 
     this.Alert = Alert;
-  </script>
-  <script>
-    
-    $(document).ready(function () {
-      new DataTable("#example");
-    });
   </script>
 </body>
 

@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="css/vertical-layout-light/custom.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.semanticui.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" />
   <link rel="shortcut icon" href="https://thuyvanhhc.netlify.app/assets/img/logohhc.PNG" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
@@ -145,6 +147,19 @@
       </div>
     </div>
   </div>
+  <% if(locals.success != '') { %>
+    <script>
+      window.onload = function() {
+        Alert.success('<%- locals.success%>', 'Success', { displayDuration: 3000, pos: 'top' });
+      };
+    </script>
+  <% } else if(locals.error != '') { %>  
+    <script>
+      window.onload = function() {
+        Alert.error('<%- locals.error%>', 'Error', { displayDuration: 3000, pos: 'top' });
+      };
+    </script>
+   <% } %>
   <script src="vendors/js/vendor.bundle.base.js"></script>
   <script src="js/off-canvas.js"></script>
   <script src="js/hoverable-collapse.js"></script>
@@ -159,6 +174,113 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.semanticui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script>
+    var Alert = undefined;
+    (function (Alert) {
+      var alert, error, trash, info, success, warning, _container;
+      info = function (message, title, options) {
+        return alert("info", message, title, "fa fa-info-circle", options);
+      };
+      warning = function (message, title, options) {
+        return alert("warning", message, title, "fa fa-warning", options);
+      };
+      error = function (message, title, options) {
+        return alert(
+          "error",
+          message,
+          title,
+          "fa fa-exclamation-circle",
+          options
+        );
+      };
+
+      trash = function (message, title, options) {
+        return alert("trash", message, title, "fa fa-trash-o", options);
+      };
+
+      success = function (message, title, options) {
+        return alert("success", message, title, "fa fa-check-circle", options);
+      };
+      alert = function (type, message, title, icon, options) {
+        var alertElem, messageElem, titleElem, iconElem, innerElem, _container;
+        if (typeof options === "undefined") {
+          options = {};
+        }
+        options = $.extend({}, Alert.defaults, options);
+        if (!_container) {
+          _container = $("#alerts");
+          if (_container.length === 0) {
+            _container = $("<ul>").attr("id", "alerts").appendTo($("body"));
+          }
+        }
+        if (options.width) {
+          _container.css({
+            width: options.width,
+          });
+        }
+        alertElem = $("<li>")
+          .addClass("alert")
+          .addClass("alert-" + type);
+        setTimeout(function () {
+          alertElem.addClass("open");
+        }, 1);
+        if (icon) {
+          iconElem = $("<i>").addClass(icon);
+          alertElem.append(iconElem);
+        }
+        innerElem = $("<div>").addClass("alert-block");
+        //innerElem = $("<i>").addClass("fa fa-times");
+        alertElem.append(innerElem);
+        if (title) {
+          titleElem = $("<div>").addClass("alert-title").append(title);
+          innerElem.append(titleElem);
+        }
+        if (message) {
+          messageElem = $("<div>").addClass("alert-message").append(message);
+          //innerElem.append("<i class="fa fa-times"></i>");
+          innerElem.append(messageElem);
+          //innerElem.append("<em>Click to Dismiss</em>");
+          //      innerElemc = $("<i>").addClass("fa fa-times");
+        }
+        if (options.displayDuration > 0) {
+          setTimeout(function () {
+            leave();
+          }, options.displayDuration);
+        } else {
+          innerElem.append("<em>Click to Dismiss</em>");
+        }
+        alertElem.on("click", function () {
+          leave();
+        });
+
+        function leave() {
+          alertElem.removeClass("open");
+          alertElem.one(
+            "webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",
+            function () {
+              return alertElem.remove();
+            }
+          );
+        }
+        return _container.prepend(alertElem);
+      };
+      Alert.defaults = {
+        width: "",
+        icon: "",
+        displayDuration: 3000,
+        pos: "",
+      };
+      Alert.info = info;
+      Alert.warning = warning;
+      Alert.error = error;
+      Alert.trash = trash;
+      Alert.success = success;
+      return (_container = void 0);
+    })(Alert || (Alert = {}));
+
+    this.Alert = Alert;
+  </script>
   <script>
     function reverValue(data) {
       let val = data.replaceAll(",","")

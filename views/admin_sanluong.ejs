@@ -83,13 +83,21 @@
                                 <%- new Intl.NumberFormat().format(item.revenue) %> </td>
                             <% } %>
                             <td class="text-right"><%- new Intl.NumberFormat().format(item.revenue_month) %></td>
-                            <td class="text-right"><%- new Intl.NumberFormat().format(item.revenue_year) %></td>  
+                            <td class="text-right"><%- new Intl.NumberFormat().format(item.revenue_year) %></td> 
+                            <td>
+                                <div class="template-demo">
+                                  <button class="btn btn-primary btn-rounded btn-icon"
+                                    onclick="location.href='/admin/sanluong/delete/<%- item._id%>'">
+                                    <i class="icon trash alternate outline"></i>
+                                  </button>
+                                </div>
+                              </td> 
                           </tr>
                           <div id="updateElectric<%- item._id %>" class="modal fade" tabindex="-1" role="dialog"
                           aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
-                                <form action="/sanluong/update/electric/<%- item._id%>" method="POST">
+                                <form action="/admin/sanluong/update/electric/<%- item._id%>" method="POST">
                                   <div class="modal-body">					
                                     <div class="form-group">
                                       <label>Sản lượng điện (MWh) (<%- item.time %>)</label>
@@ -108,7 +116,7 @@
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
-                                  <form action="/sanluong/update/revenue/<%- item._id%>" method="POST">
+                                  <form action="/admin/sanluong/update/revenue/<%- item._id%>" method="POST">
                                     <div class="modal-body">					
                                       <div class="form-group">
                                         <label>Doanh thu (VNĐ) (<%- item.time %>)</label>
@@ -131,7 +139,7 @@
                   aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
-                        <form action="/uploadExcel" method="POST" enctype="multipart/form-data">
+                        <form action="/admin/uploadExcel" method="POST" enctype="multipart/form-data">
                           <div class="modal-body">					
                             <div class="form-group">
                               <input type="file" class="form-control" name="excel" multiple>

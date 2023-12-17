@@ -1,28 +1,56 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
-    <li class="nav-item">
-      <a class="nav-link" href="/">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">Tổng quan</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/tinhtoan">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">Tính toán</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/buocxa">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">Bước xả</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/sanluong">
-        <i class="icon-grid menu-icon"></i>
-        <span class="menu-title">Sản lượng</span>
-      </a>
-    </li>
+    <% if(roleUser == "50") { %> 
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Tổng quan</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link collapsed" data-dropdown-toggle="dropdown">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Menu</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="dropdown">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="/tinhtoan">Tính toán</a></li>
+            <li class="nav-item"> <a class="nav-link" href="/buocxa">Bước xả</a></li>
+          </ul>
+        </div>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link" href="/tinhtoan">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Tính toán</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/buocxa">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Bước xả</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/sanluong">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Sản lượng</span>
+        </a>
+      </li>
+    <% } else { %>  
+      <li class="nav-item">
+        <a class="nav-link" href="/thongbao">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Thông báo</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/taikhoan">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Tài khoản</span>
+        </a>
+      </li>
+    <% } %>
   </ul>
 </nav>
